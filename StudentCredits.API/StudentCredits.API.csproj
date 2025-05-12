@@ -14,16 +14,33 @@
     <PackageReference Include="Autofac" Version="8.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.1" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StudentCredtis.Contracts\StudentCredtis.Contracts.csproj" />
-    <ProjectReference Include="..\StudentCredtis.Domain.Entities\StudentCredtis.Domain.Entities.csproj" />
-    <ProjectReference Include="..\StudentCredtis.Domain\StudentCredtis.Domain.csproj" />
-    <ProjectReference Include="..\StudentCredtis.Helpers\StudentCredtis.Helpers.csproj" />
-    <ProjectReference Include="..\StudentCredtis.Infrastructure\StudentCredtis.Infrastructure.csproj" />
+    <ProjectReference Include="..\StudentCredits.Contracts\StudentCredits.Contracts.csproj" />
+    <ProjectReference Include="..\StudentCredits.Domain.Entities\StudentCredits.Domain.Entities.csproj" />
+    <ProjectReference Include="..\StudentCredits.Domain\StudentCredits.Domain.csproj" />
+    <ProjectReference Include="..\StudentCredits.Helpers\StudentCredits.Helpers.csproj" />
+    <ProjectReference Include="..\StudentCredits.Infrastructure\StudentCredits.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
