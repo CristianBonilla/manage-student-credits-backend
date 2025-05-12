@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>3e64e0d7-3967-407e-a33f-32c882e1a50c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Autofac" Version="8.3.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentCredtis.Contracts\StudentCredtis.Contracts.csproj" />
+    <ProjectReference Include="..\StudentCredtis.Domain.Entities\StudentCredtis.Domain.Entities.csproj" />
+    <ProjectReference Include="..\StudentCredtis.Domain\StudentCredtis.Domain.csproj" />
+    <ProjectReference Include="..\StudentCredtis.Helpers\StudentCredtis.Helpers.csproj" />
+    <ProjectReference Include="..\StudentCredtis.Infrastructure\StudentCredtis.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
