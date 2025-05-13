@@ -1,4 +1,4 @@
-namespace StudentCredits.Helpers;
+namespace StudentCredits.Contracts.DTO.Teacher;
 
 public record struct TeacherCommonValues
 {

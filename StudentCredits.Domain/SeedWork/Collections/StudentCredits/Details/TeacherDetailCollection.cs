@@ -1,6 +1,6 @@
+using StudentCredits.Contracts.DTO.Teacher;
 using StudentCredits.Contracts.SeedData;
 using StudentCredits.Domain.Entities.Details;
-using StudentCredits.Helpers;
 
 namespace StudentCredits.Domain.SeedWork.Collections.StudentCredits.Details;
 
