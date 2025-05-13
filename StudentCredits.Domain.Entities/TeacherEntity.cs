@@ -1,3 +1,5 @@
+using StudentCredits.Domain.Entities.Details;
+
 namespace StudentCredits.Domain.Entities;
 
 public class TeacherEntity
@@ -10,4 +12,5 @@ public class TeacherEntity
   public required string Profession { get; set; }
   public DateTimeOffset Created { get; set; }
   public uint Version { get; set; }
+  public ICollection<TeacherDetailEntity> Details { get; set; } = [];
 }
