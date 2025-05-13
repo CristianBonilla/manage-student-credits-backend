@@ -21,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -41,6 +42,12 @@
     <ProjectReference Include="..\StudentCredits.Domain\StudentCredits.Domain.csproj" />
     <ProjectReference Include="..\StudentCredits.Helpers\StudentCredits.Helpers.csproj" />
     <ProjectReference Include="..\StudentCredits.Infrastructure\StudentCredits.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
 
 </Project>
