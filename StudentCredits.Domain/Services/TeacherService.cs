@@ -50,13 +50,14 @@ public class TeacherService(
 
   public IAsyncEnumerable<(TeacherEntity Teacher, IEnumerable<TeacherDetailEntity> TeacherDetails)> GetTeachers()
   {
+    var teacherDetails = _teacherDetailRepository.GetAll(null, teacherDetail => teacherDetail.Subject);
     var teachers = _teacherRepository
       .GetAll(teachers => teachers
         .OrderBy(order => order.DocumentNumber)
         .ThenBy(order => order.Firstname)
         .ThenBy(order => order.Lastname))
       .GroupJoin(
-        _teacherDetailRepository.GetAll(),
+        teacherDetails,
         teacher => teacher.TeacherId,
         teacherDetail => teacherDetail.TeacherId,
         (teacher, teacherDetails) => (teacher, teacherDetails))

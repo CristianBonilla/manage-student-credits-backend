@@ -57,6 +57,9 @@ public class StudentService(
 
   public IAsyncEnumerable<(StudentEntity Student, IEnumerable<StudentDetailEntity> Details)> GetStudents()
   {
+    var studentDetails = _studentDetailRepository.GetAll(null,
+      studentDetail => studentDetail.TeacherDetail,
+      studentDetail => studentDetail.TeacherDetail.Subject);
     var students = _studentRepository
       .GetAll(students => students
         .OrderBy(order => order.DocumentNumber)
