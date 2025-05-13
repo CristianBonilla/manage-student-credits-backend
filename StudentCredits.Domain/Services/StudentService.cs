@@ -55,7 +55,7 @@ public class StudentService(
     return addedStudentDetail;
   }
 
-  public IAsyncEnumerable<(StudentEntity Student, IEnumerable<StudentDetailEntity> Details)> GetStudents()
+  public IAsyncEnumerable<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)> GetStudents()
   {
     var studentDetails = _studentDetailRepository.GetAll(null,
       studentDetail => studentDetail.TeacherDetail,
