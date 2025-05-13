@@ -20,6 +20,7 @@
     <ProjectReference Include="..\StudentCredits.Contracts\StudentCredits.Contracts.csproj" />
     <ProjectReference Include="..\StudentCredits.Domain.Entities\StudentCredits.Domain.Entities.csproj" />
     <ProjectReference Include="..\StudentCredits.Helpers\StudentCredits.Helpers.csproj" />
+    <ProjectReference Include="..\StudentCredits.Infrastructure\StudentCredits.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
