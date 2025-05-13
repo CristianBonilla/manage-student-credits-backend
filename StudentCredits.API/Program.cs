@@ -1,25 +1,24 @@
-var builder = WebApplication.CreateBuilder(args);
+using Autofac.Extensions.DependencyInjection;
+using StudentCredits.API.Utils;
+using StudentCredits.Contracts.Enums;
+using StudentCredits.Infrastructure.Contexts.StudentCredits;
 
-// Add services to the container.
+namespace StudentCredits.API;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-  app.UseSwagger();
-  app.UseSwaggerUI();
+  public static async Task Main(string[] args)
+  {
+    IHost host = CreateHostBuilder(args).Build();
+    await DbConnectionSingleton.Start(host).Connect<StudentCreditsContext>(DbConnectionTypes.Migration);
+    await host.RunAsync();
+  }
+
+  private static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+      .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+      .ConfigureWebHostDefaults(builder =>
+      {
+        builder.UseStartup<Startup>();
+      });
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
