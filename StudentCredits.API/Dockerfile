@@ -1,29 +1,35 @@
-# Consulte https://aka.ms/customizecontainer para aprender a personalizar su contenedor de depuración y cómo Visual Studio usa este Dockerfile para compilar sus imágenes para una depuración más rápida.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Esta fase se usa cuando se ejecuta desde VS en modo rápido (valor predeterminado para la configuración de depuración)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+ARG DOTNET_RUNTIME=mcr.microsoft.com/dotnet/aspnet:8.0
+ARG DOTNET_SDK=mcr.microsoft.com/dotnet/sdk:8.0
+
+FROM $DOTNET_RUNTIME AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 519
+EXPOSE 403
 
-
-# Esta fase se usa para compilar el proyecto de servicio
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM $DOTNET_SDK AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["StudentCredits.API/StudentCredits.API.csproj", "StudentCredits.API/"]
+COPY ["StudentCredits.Contracts/StudentCredits.Contracts.csproj", "StudentCredits.Contracts/"]
+COPY ["StudentCredits.Domain/StudentCredits.Domain.csproj", "StudentCredits.Domain/"]
+COPY ["StudentCredits.Domain.Entities/StudentCredits.Domain.Entities.csproj", "StudentCredits.Domain.Entities/"]
+COPY ["StudentCredits.Helpers/StudentCredits.Helpers.csproj", "StudentCredits.Helpers/"]
+COPY ["StudentCredits.Infrastructure/StudentCredits.Infrastructure.csproj", "StudentCredits.Infrastructure/"]
+
+COPY ["StudentCredits.Tests/StudentCredits.Tests.csproj", "StudentCredits.Tests/"]
+
 RUN dotnet restore "./StudentCredits.API/StudentCredits.API.csproj"
 COPY . .
 WORKDIR "/src/StudentCredits.API"
 RUN dotnet build "./StudentCredits.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Esta fase se usa para publicar el proyecto de servicio que se copiará en la fase final.
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./StudentCredits.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Esta fase se usa en producción o cuando se ejecuta desde VS en modo normal (valor predeterminado cuando no se usa la configuración de depuración)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
