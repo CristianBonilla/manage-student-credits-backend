@@ -11,5 +11,5 @@ public class StudentEntity
   public required string Email { get; set; }
   public DateTimeOffset Created { get; set; }
   public uint Version { get; set; }
-  public ICollection<StudentDetailEntity> Details { get; set; } = [];
+  public ICollection<StudentDetailEntity> StudentDetails { get; set; } = [];
 }

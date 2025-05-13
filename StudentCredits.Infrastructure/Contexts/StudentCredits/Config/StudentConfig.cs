@@ -32,7 +32,7 @@ class StudentConfig(ISeedData? seedData) : IEntityTypeConfiguration<StudentEntit
       .HasDefaultValueSql("now()");
     builder.Property(property => property.Version)
       .IsRowVersion();
-    builder.HasMany(many => many.Details)
+    builder.HasMany(many => many.StudentDetails)
       .WithOne(one => one.Student)
       .HasForeignKey(key => key.StudentId)
       .OnDelete(DeleteBehavior.Cascade);
@@ -59,7 +59,7 @@ class StudentDetailConfig(ISeedData? seedData) : IEntityTypeConfiguration<Studen
       .WithMany()
       .HasForeignKey(key => key.TeacherDetailId);
     builder.HasOne(one => one.Student)
-      .WithMany(many => many.Details)
+      .WithMany(many => many.StudentDetails)
       .HasForeignKey(key => key.StudentId);
     if (seedData is not null)
       builder.HasData(seedData.StudentCredits.StudentDetails.GetAll());

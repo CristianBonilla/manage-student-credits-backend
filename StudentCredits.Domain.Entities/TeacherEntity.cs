@@ -12,5 +12,5 @@ public class TeacherEntity
   public required string Profession { get; set; }
   public DateTimeOffset Created { get; set; }
   public uint Version { get; set; }
-  public ICollection<TeacherDetailEntity> Details { get; set; } = [];
+  public ICollection<TeacherDetailEntity> TeacherDetails { get; set; } = [];
 }

@@ -36,7 +36,7 @@ class TeacherConfig(ISeedData? seedData = null) : IEntityTypeConfiguration<Teach
       .HasDefaultValueSql("now()");
     builder.Property(property => property.Version)
       .IsRowVersion();
-    builder.HasMany(many => many.Details)
+    builder.HasMany(many => many.TeacherDetails)
       .WithOne(one => one.Teacher)
       .HasForeignKey(key => key.TeacherId)
       .OnDelete(DeleteBehavior.Cascade);
@@ -63,7 +63,7 @@ class TeacherDetailConfig(ISeedData? seedData) : IEntityTypeConfiguration<Teache
     builder.Property(property => property.Version)
       .IsRowVersion();
     builder.HasOne(one => one.Teacher)
-      .WithMany(many => many.Details)
+      .WithMany(many => many.TeacherDetails)
       .HasForeignKey(key => key.TeacherId);
     builder.HasOne(one => one.Subject)
       .WithMany()
