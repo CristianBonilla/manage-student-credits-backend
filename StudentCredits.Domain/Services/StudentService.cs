@@ -13,12 +13,14 @@ public class StudentService(
   IStudentCreditsRepositoryContext context,
   IStudentRepository studentRepository,
   IStudentDetailRepository studentDetailRepository,
+  ITeacherRepository teacherRepository,
   ITeacherDetailRepository teacherDetailRepository,
   ISubjectRepository subjectRepository) : IStudentService
 {
   readonly IStudentCreditsRepositoryContext _context = context;
   readonly IStudentRepository _studentRepository = studentRepository;
   readonly IStudentDetailRepository _studentDetailRepository = studentDetailRepository;
+  readonly ITeacherRepository _teacherRepository = teacherRepository;
   readonly ITeacherDetailRepository _teacherDetailRepository = teacherDetailRepository;
   readonly ISubjectRepository _subjectRepository = subjectRepository;
 
@@ -33,6 +35,8 @@ public class StudentService(
 
   public async Task<StudentDetailEntity> AssignSubject(Guid studentId, Guid teacherId, Guid subjectId)
   {
+    CheckStudent(studentId);
+    CheckTeacher(teacherId);
     SubjectEntity subject = GetSubjectById(subjectId);
     TeacherDetailEntity teacherDetail = GetTeacherDetail(teacherId, subjectId);
     bool existingStudentDetail = _studentDetailRepository.Exists(studentDetail => studentDetail.StudentId == studentId && studentDetail.TeacherDetailId == teacherDetail.TeacherDetailId);
@@ -77,12 +81,14 @@ public class StudentService(
 
   public IAsyncEnumerable<SubjectEntity> GetSubjectsByStudentId(Guid studentId)
   {
+    CheckStudent(studentId);
     var subjects = _studentDetailRepository
       .GetByFilter(
         studentDetail => studentDetail.StudentId == studentId,
         studentDetails => studentDetails.OrderBy(order => order.TeacherDetail.Subject.Name),
         studentDetail => studentDetail.TeacherDetail.Subject)
       .Select(studentDetail => studentDetail.TeacherDetail.Subject)
+      .DistinctBy(subject => subject.SubjectId)
       .ToAsyncEnumerable();
 
     return subjects;
@@ -90,6 +96,7 @@ public class StudentService(
 
   public Task<decimal> GetTotalCreditsByStudentId(Guid studentId)
   {
+    CheckStudent(studentId);
     decimal totalCredits = _studentDetailRepository.GetByFilter(studentDetail => studentDetail.StudentId == studentId)
       .Select(studentDetail => _teacherDetailRepository.Find([studentDetail.TeacherDetailId])!)
       .DistinctBy(teacherDetail => teacherDetail.SubjectId)
@@ -98,7 +105,24 @@ public class StudentService(
     return Task.FromResult(totalCredits);
   }
 
-  public Task<StudentEntity> FindStudentById(Guid studentId) => Task.FromResult(GetStudentById(studentId));
+  public Task<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)> FindStudentById(Guid studentId)
+  {
+    StudentEntity student = GetStudentById(studentId);
+    var studentDetails = _studentDetailRepository.GetByFilter(
+      studentDetail => studentDetail.StudentId == studentId,
+      null,
+      studentDetail => studentDetail.TeacherDetail,
+      studentDetail => studentDetail.TeacherDetail.Subject);
+
+    return Task.FromResult((student, studentDetails));
+  }
+
+  private void CheckStudent(Guid studentId)
+  {
+    bool existingStudent = _studentRepository.Exists(student => student.StudentId == studentId);
+    if (!existingStudent)
+      throw StudentExceptionsHelper.NotFound(studentId);
+  }
 
   private void CheckStudent(StudentEntity student)
   {
@@ -120,6 +144,13 @@ public class StudentService(
     SubjectEntity subject = _subjectRepository.Find([subjectId]) ?? throw SubjectExceptionsHelper.NotFound(subjectId);
 
     return subject;
+  }
+
+  private void CheckTeacher(Guid teacherId)
+  {
+    bool existingTeacher = _teacherRepository.Exists(teacher => teacher.TeacherId == teacherId);
+    if (!existingTeacher)
+      throw TeacherExceptionsHelper.NotFound(teacherId);
   }
 
   private TeacherDetailEntity GetTeacherDetail(Guid teacherId, Guid subjectId)

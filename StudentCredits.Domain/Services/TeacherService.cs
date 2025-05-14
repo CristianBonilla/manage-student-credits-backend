@@ -75,6 +75,7 @@ public class TeacherService(
         teacherDetails => teacherDetails.OrderBy(order => order.Subject.Name),
         teacherDetail => teacherDetail.Subject)
       .Select(teacherDetail => teacherDetail.Subject)
+      .DistinctBy(subject => subject.SubjectId)
       .ToAsyncEnumerable();
 
     return subjects;

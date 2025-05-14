@@ -10,5 +10,5 @@ public interface IStudentService
   IAsyncEnumerable<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)> GetStudents();
   IAsyncEnumerable<SubjectEntity> GetSubjectsByStudentId(Guid studentId);
   Task<decimal> GetTotalCreditsByStudentId(Guid studentId);
-  Task<StudentEntity> FindStudentById(Guid studentId);
+  Task<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)> FindStudentById(Guid studentId);
 }
