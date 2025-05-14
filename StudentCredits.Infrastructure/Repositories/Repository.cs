@@ -76,7 +76,7 @@ public abstract class Repository<TContext, TEntity>(IRepositoryContext<TContext>
 
   public TEntity? Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigations) => WithNavigations(navigations).FirstOrDefault(predicate);
 
-  public bool Exists(Expression<Func<TEntity, bool>> predicate) => _entitySet.Any(predicate);
+  public bool Exists(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigations) => WithNavigations(navigations).Any(predicate);
 
   public IEnumerable<TEntity> GetAll(
     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,

@@ -15,7 +15,7 @@ public interface IRepository<in TContext, TEntity>
   IEnumerable<TEntity> DeleteRange(IEnumerable<TEntity> entities);
   TEntity? Find(object[] keyValues, params Expression<Func<TEntity, object>>[] navigations);
   TEntity? Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigations);
-  bool Exists(Expression<Func<TEntity, bool>> predicate);
+  bool Exists(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigations);
   IEnumerable<TEntity> GetAll(
     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
     params Expression<Func<TEntity, object>>[] navigations);
