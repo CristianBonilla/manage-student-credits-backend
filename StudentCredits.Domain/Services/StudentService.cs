@@ -42,12 +42,19 @@ public class StudentService(
     bool existingStudentDetail = _studentDetailRepository.Exists(studentDetail => studentDetail.StudentId == studentId && studentDetail.TeacherDetailId == teacherDetail.TeacherDetailId);
     if (existingStudentDetail)
       throw StudentExceptionsHelper.BadRequest(studentId, subjectId);
-    int subjectsNumber = _studentDetailRepository.GetByFilter(studentDetail => studentDetail.StudentId == studentId)
-      .Select(studentDetail => _teacherDetailRepository.Find([studentDetail.TeacherDetailId])!)
-      .DistinctBy(teacherDetail => teacherDetail.SubjectId)
-      .Count();
-    if (subjectsNumber == StudentCommonValues.SUBJECTS_MAX_NUMBER)
-      throw StudentExceptionsHelper.BadRequest(studentId);
+    bool isSubjectWithDiffTeacher = _studentDetailRepository.Exists(studentDetail => studentDetail.StudentId == studentId
+      && studentDetail.TeacherDetail.TeacherId != teacherId
+      && studentDetail.TeacherDetail.SubjectId == subjectId,
+      studentDetail => studentDetail.TeacherDetail);
+    if (!isSubjectWithDiffTeacher)
+    {
+      int subjectsNumber = _studentDetailRepository.GetByFilter(studentDetail => studentDetail.StudentId == studentId)
+        .Select(studentDetail => _teacherDetailRepository.Find([studentDetail.TeacherDetailId])!)
+        .DistinctBy(teacherDetail => teacherDetail.SubjectId)
+        .Count();
+      if (subjectsNumber == StudentCommonValues.SUBJECTS_MAX_NUMBER)
+        throw StudentExceptionsHelper.BadRequest(studentId);
+    }
     StudentDetailEntity studentDetail = new()
     {
       StudentId = studentId,

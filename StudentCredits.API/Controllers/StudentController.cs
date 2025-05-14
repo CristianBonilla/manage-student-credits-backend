@@ -79,7 +79,6 @@ public class StudentController(IMapper mapper, IStudentService studentService) :
     return Ok(totalCredits);
   }
 
-
   [HttpGet("{studentId}")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentResult))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
