@@ -35,9 +35,9 @@ class StudentCreditsProfile : Profile
       .ForMember(member => member.Version, options => options.Ignore())
       .ForMember(member => member.Teacher, options => options.Ignore());
     CreateMap<
-      IAsyncEnumerable<(TeacherEntity Teacher, IEnumerable<TeacherDetailEntity> TeacherDetails)>,
-      IAsyncEnumerable<TeachersResult>>()
-      .ConvertUsing<TeachersFilterConverter>();
+      (TeacherEntity Teacher, IEnumerable<TeacherDetailEntity> TeacherDetails),
+      TeacherResult>()
+      .ConvertUsing<TeacherResultConverter>();
   }
 
   private void StudentMaps()
@@ -58,9 +58,9 @@ class StudentCreditsProfile : Profile
       .ForMember(member => member.Version, options => options.Ignore())
       .ForMember(member => member.Student, options => options.Ignore());
     CreateMap<
-      IAsyncEnumerable<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)>,
-      IAsyncEnumerable<StudentsResult>>()
-      .ConvertUsing<StudentsFilterConverter>();
+      (StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails),
+      StudentResult>()
+      .ConvertUsing<StudentResultConverter>();
   }
 
   private void SubjectMaps()
