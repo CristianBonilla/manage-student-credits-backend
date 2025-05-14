@@ -68,6 +68,7 @@ public class TeacherService(
 
   public IAsyncEnumerable<SubjectEntity> GetSubjectsByTeacherId(Guid teacherId)
   {
+    CheckTeacher(teacherId);
     var subjects = _teacherDetailRepository
       .GetByFilter(
         teacherDetail => teacherDetail.TeacherId == teacherId,
@@ -79,7 +80,20 @@ public class TeacherService(
     return subjects;
   }
 
-  public Task<TeacherEntity> FindTeacherById(Guid teacherId) => Task.FromResult(GetTeacherById(teacherId));
+  public Task<(TeacherEntity Teacher, IEnumerable<TeacherDetailEntity> TeacherDetails)> FindTeacherById(Guid teacherId)
+  {
+    TeacherEntity teacher = GetTeacherById(teacherId);
+    var teacherDetails = _teacherDetailRepository.GetByFilter(teacherDetail => teacherDetail.TeacherId == teacher.TeacherId, null, teacherDetail => teacherDetail.Subject);
+
+    return Task.FromResult((teacher, teacherDetails));
+  }
+
+  private void CheckTeacher(Guid teacherId)
+  {
+    bool existingTeacher = _teacherRepository.Exists(teacher => teacher.TeacherId == teacherId);
+    if (!existingTeacher)
+      throw TeacherExceptionsHelper.NotFound(teacherId);
+  }
 
   private void CheckTeacher(TeacherEntity teacher)
   {
