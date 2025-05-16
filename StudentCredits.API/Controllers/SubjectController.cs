@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using StudentCredits.API.Filters;
 using StudentCredits.Contracts.DTO.Subject;
+using StudentCredits.Contracts.DTO.Teacher;
 using StudentCredits.Contracts.Services;
 using StudentCredits.Domain.Entities;
 
@@ -39,6 +40,19 @@ public class SubjectController(IMapper mapper, ISubjectService subjectService) :
     var subjects = _subjectService.GetSubjects();
     await foreach (SubjectEntity subject in subjects)
       yield return _mapper.Map<SubjectResponse>(subject);
+  }
+
+  [HttpGet("{subjectId}/teachers")]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IAsyncEnumerable<TeacherResponse>))]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public IActionResult GetTeachersBySubjectId(Guid subjectId)
+  {
+    var teachers = _subjectService
+      .GetTeachersBySubjectId(subjectId)
+      .Select(_mapper.Map<TeacherResponse>);
+
+    return Ok(teachers);
   }
 
   [HttpGet("{subjectId}")]
