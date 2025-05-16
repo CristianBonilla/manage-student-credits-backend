@@ -46,15 +46,8 @@ public class StudentService(
       && studentDetail.TeacherDetail.TeacherId != teacherId
       && studentDetail.TeacherDetail.SubjectId == subjectId,
       studentDetail => studentDetail.TeacherDetail);
-    if (!isSubjectWithDiffTeacher)
-    {
-      int subjectsNumber = _studentDetailRepository.GetByFilter(studentDetail => studentDetail.StudentId == studentId)
-        .Select(studentDetail => _teacherDetailRepository.Find([studentDetail.TeacherDetailId])!)
-        .DistinctBy(teacherDetail => teacherDetail.SubjectId)
-        .Count();
-      if (subjectsNumber == StudentCommonValues.SUBJECTS_MAX_NUMBER)
-        throw StudentExceptionsHelper.BadRequest(studentId);
-    }
+    if (!isSubjectWithDiffTeacher && !await CanAddSubjects(studentId))
+      throw StudentExceptionsHelper.BadRequest(studentId);
     StudentDetailEntity studentDetail = new()
     {
       StudentId = studentId,
@@ -110,6 +103,16 @@ public class StudentService(
       .Sum(teacherDetail => teacherDetail.Credits);
 
     return Task.FromResult(totalCredits);
+  }
+
+  public Task<bool> CanAddSubjects(Guid studentId)
+  {
+    int subjectsNumber = _studentDetailRepository.GetByFilter(studentDetail => studentDetail.StudentId == studentId)
+      .Select(studentDetail => _teacherDetailRepository.Find([studentDetail.TeacherDetailId])!)
+      .DistinctBy(teacherDetail => teacherDetail.SubjectId)
+      .Count();
+
+    return Task.FromResult(subjectsNumber < StudentCommonValues.SUBJECTS_MAX_NUMBER);
   }
 
   public Task<(StudentEntity Student, IEnumerable<StudentDetailEntity> StudentDetails)> FindStudentById(Guid studentId)

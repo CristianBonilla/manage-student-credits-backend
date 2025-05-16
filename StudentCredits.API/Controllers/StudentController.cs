@@ -79,6 +79,17 @@ public class StudentController(IMapper mapper, IStudentService studentService) :
     return Ok(totalCredits);
   }
 
+  [HttpGet("{studentId}/can-add-subjects")]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> CanAddSubjects(Guid studentId)
+  {
+    bool allowed = await _studentService.CanAddSubjects(studentId);
+
+    return Ok(allowed);
+  }
+
   [HttpGet("{studentId}")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentResult))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
